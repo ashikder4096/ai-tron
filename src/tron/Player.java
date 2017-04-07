@@ -29,14 +29,18 @@ class Player {
         }
         	
         // game loop
-        while (true) {
+        while (true) //insert logic for how to move
+        {
             int N = in.nextInt(); // total number of players (2 to 4).
             int P = in.nextInt(); // your player number (0 to 3).
             for (int i = 0; i < N; i++) { //creates lightcycle for each players and sets their position as "owner"
+            	//current position
                 int X0 = in.nextInt(); // starting X coordinate of lightcycle (or -1)
-                int Y0 = in.nextInt(); // starting Y coordinate of lightcycle (or -1)
+                int Y0 = in.nextInt(); // starting Y coordinate of lightcycle (or -1) 
+                //new position
                 int X1 = in.nextInt(); // starting X coordinate of lightcycle (can be the same as X0 if you play before this player)
                 int Y1 = in.nextInt(); // starting Y coordinate of lightcycle (can be the same as Y0 if you play before this player)
+                //which grids the player occupies
                 map[X1][Y1].setOwner(i);
                 map[X0][Y0].setOwner(i);
                 if (i==P) { //setting "my" x and y
@@ -48,6 +52,7 @@ class Player {
             // Write an action using System.out.println()
             // To debug: System.err.println("Debug messages...");
             boolean moved = false;
+            //Our logic for moving around
             //Start: what happens if lightcycle is at the edge
             if(myX1 < width-1)
             {
@@ -116,7 +121,7 @@ class Node implements Comparable<Node>{
         this.name = "(" + x + "," + y + ")";
         this.x = x;
         this.y = y;
-        this.owner = -1;
+        this.owner = -1; //-1 means there is no owner of this node
         }
 
     public ArrayList<Node> getChildren()
