@@ -96,7 +96,7 @@ class Node implements Comparable<Node>{
     private int posX, posY;
     private double disFromGoal, disFromStart, cost;
     private Node parent;
-    private ArrayList<Node> children;
+    private ArrayList<Node> children = new ArrayList<>();
     private int owner;
 	
 	public Node(int x, int y){
@@ -207,30 +207,6 @@ class Node implements Comparable<Node>{
 
 class AStar{
 	
-	public PriorityQueue<Node> getQueue() {
-		return queue;
-	}
-
-	public void setQueue(PriorityQueue<Node> queue) {
-		this.queue = queue;
-	}
-
-	public ArrayList<Node> getExplored() {
-		return explored;
-	}
-
-	public void setExplored(ArrayList<Node> explored) {
-		this.explored = explored;
-	}
-
-	public Node[][] getGrid() {
-		return grid;
-	}
-
-	public void setGrid(Node[][] grid) {
-		this.grid = grid;
-	}
-
 	PriorityQueue<Node> queue = new PriorityQueue<>();
 	ArrayList<Node> explored = new ArrayList<>();
 	Node[][] grid; //flip x and y coordinate
@@ -267,6 +243,30 @@ class AStar{
 		queue.add(startNode); //will initialize with startNode being added to the queue
 		startNode.setParent(null);
 		printList(grid); //displays the map
+	}
+	
+	public PriorityQueue<Node> getQueue() {
+		return queue;
+	}
+
+	public void setQueue(PriorityQueue<Node> queue) {
+		this.queue = queue;
+	}
+
+	public ArrayList<Node> getExplored() {
+		return explored;
+	}
+
+	public void setExplored(ArrayList<Node> explored) {
+		this.explored = explored;
+	}
+
+	public Node[][] getGrid() {
+		return grid;
+	}
+
+	public void setGrid(Node[][] grid) {
+		this.grid = grid;
 	}
 	
 	public boolean search(){
