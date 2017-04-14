@@ -9,40 +9,36 @@ import java.math.*;
  * the standard input according to the problem statement.
  **/
 class Player {
+	int totalPlayers, myPNum;
+	
     static int myX0 = 0;
-    static int myX1 = 0;
     static int myY0 = 0;
+    static int myX1 = 0;
     static int myY1 = 0;
-
+    
+    static int width, height;
+    static Node[][] map;
+    
+    static AStar astar;
+    static ArrayList<Node> path = new ArrayList<>();
+    
+    
     public static void main(String args[]) {
+    	int width = 30;
+    	int height = 20;
+    	createBoard(width, height);
         Scanner in = new Scanner(System.in);
-        int height = 20;
-        int width = 30;
-        Node[][] map = new Node[width][height]; //creating a map variable with rectangular width, height
-        
-        for (int i = 0; i < width; i++) //creating a map where every "square" is a node
-        {
-        	for (int j = 0; j < height; j++)
-        	{
-        		map[i][j] = new Node(i,j);        	
-        	}
-        }
-        
-        AStar path = new AStar(map);
         	
         // game loop
-        while (true) //insert logic for how to move
-        {
+        while (true) {
             int N = in.nextInt(); // total number of players (2 to 4).
             int P = in.nextInt(); // your player number (0 to 3).
-            for (int i = 0; i < N; i++) { //creates lightcycle for each players and sets their position as "owner"
-            	//current position
+            for (int i = 0; i < N; i++) 
+            {
                 int X0 = in.nextInt(); // starting X coordinate of lightcycle (or -1)
-                int Y0 = in.nextInt(); // starting Y coordinate of lightcycle (or -1) 
-                //new position
+                int Y0 = in.nextInt(); // starting Y coordinate of lightcycle (or -1)
                 int X1 = in.nextInt(); // starting X coordinate of lightcycle (can be the same as X0 if you play before this player)
                 int Y1 = in.nextInt(); // starting Y coordinate of lightcycle (can be the same as Y0 if you play before this player)
-                //which grids the player occupies
                 map[X1][Y1].setOwner(i);
                 map[X0][Y0].setOwner(i);
                 if (i==P) { //setting "my" x and y
@@ -50,46 +46,58 @@ class Player {
                     myY1 = Y1;
                 }
             }
-            //System.err.println(X1);
-            // Write an action using System.out.println()
-            // To debug: System.err.println("Debug messages...");
-            boolean moved = false;
-            //Our logic for moving around
-            //Start: what happens if lightcycle is at the edge
-            if(myX1 < width-1)
-            {
-            	if(map[myX1+1][myY1].getOwner() == -1)
-            	{
-            		System.out.println("RIGHT"); // A single line with UP, DOWN, LEFT or RIGHT
-            		moved = true;
-            	}
-            }
-            if(myX1 > 0 && !moved)
-            {
-            	if (map[myX1-1][myY1].getOwner() == -1)
-            	{
-            		System.out.println("LEFT");
-            		moved = true;
-            	}
-            }
-            if(myY1 < height-1 && !moved)
-            {
-            	if(map[myX1][myY1+1].getOwner() == -1)
-            	{
-            		System.out.println("DOWN");
-            		moved = true;
-            	}
-            }
-            if(myY1 > 0 && !moved)
-            {
-            	if(map[myX1][myY1-1].getOwner() == -1)
-            	{
-            		System.out.println("UP");
-            		moved = true;
-            	}
-            }
-            //End: Edges
         }
+    }
+    public static void createBoard(int width, int height)
+    {	
+        map = new Node[height][width]; //creating a map variable with rectangular width, height
+        
+        for (int i = 0; i < height; i++) //creating a map where every "square" is a node
+        {
+        	for (int j = 0; j < height; j++)
+        	{
+        		map[i][j] = new Node(i,j);        	
+        	}
+        }
+        
+        astar = new AStar(map);
+    }
+    
+    public static boolean edges() //need to fix this
+    {
+        if(myX1 == width-1)
+        {
+        	if(map[myX1+1][myY1].getOwner() == -1)
+        	{
+        		System.out.println("RIGHT"); // A single line with UP, DOWN, LEFT or RIGHT
+        		return true;
+        	}
+        }
+        if(myX1 > 0)
+        {
+        	if (map[myX1-1][myY1].getOwner() == -1)
+        	{
+        		System.out.println("LEFT");
+        		return true;
+        	}
+        }
+        if(myY1 < height-1)
+        {
+        	if(map[myX1][myY1+1].getOwner() == -1)
+        	{
+        		System.out.println("DOWN");
+        		return true;
+        	}
+        }
+        if(myY1 > 0)
+        {
+        	if(map[myX1][myY1-1].getOwner() == -1)
+        	{
+        		System.out.println("UP");
+        		return true;
+        	}
+        }
+        return false;
     }
 }
 
