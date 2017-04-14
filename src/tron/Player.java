@@ -225,13 +225,9 @@ class AStar{
 	private int getMinDistance(Node startNode, Node goalNode)
 	{
 		if(getPath(startNode, goalNode) != null)
-		{
 			return path.size();
-		}
 		else
-		{
 			return Integer.MAX_VALUE;
-		}
 	}
 	private ArrayList<Node> getPath(Node startNode, Node goalNode)
 	{
