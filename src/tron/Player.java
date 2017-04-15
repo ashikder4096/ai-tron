@@ -20,8 +20,9 @@ class Player {
     static Node[][] map;
     
     static AStar astar;
-    static ArrayList<Node> path = new ArrayList<>();
+    static Queue<Node> path = new LinkedList<>();
     
+    static String mode;
     
     public static void main(String args[]) {
     	int width = 30;
@@ -48,6 +49,7 @@ class Player {
             }
         }
     }
+    
     public static void createBoard(int width, int height)
     {	
         map = new Node[height][width]; //creating a map variable with rectangular width, height
@@ -98,6 +100,36 @@ class Player {
         	}
         }
         return false;
+    }
+    
+    public boolean clearPath() //checks if our path is clear and hasn't been taken over
+    {
+    	for(Node n : path)
+    	{
+    		if(n.getOwner() != -1)
+    		{
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    public boolean isExitPossible()
+    {
+		return false;
+    }
+    
+    public void survivalMode()
+    {
+    	//When in survivalMode
+    }
+    
+    public void attackMode()
+    {
+    	//When in attack mode
+    	//first go to the center to divide the map into four pieces
+    	//Find the best optimal path to block the enemy off inside a box using shortest path
+    	//Consider the min distance it takes to get to a node for both players
     }
 }
 
@@ -220,7 +252,7 @@ class AStar{
 	PriorityQueue<Node> queue = new PriorityQueue<>();
 	ArrayList<Node> explored = new ArrayList<>();
 	Node[][] grid; //flip x and y coordinate
-	ArrayList<Node> path = new ArrayList<>();
+	Queue<Node> path = new LinkedList<>();
 	Node startNode;
 	Node goalNode;
 	int minDistance = Integer.MAX_VALUE;
@@ -230,14 +262,7 @@ class AStar{
 	}
 	
 	@SuppressWarnings("unused")
-	private int getMinDistance(Node startNode, Node goalNode)
-	{
-		if(getPath(startNode, goalNode) != null)
-			return path.size();
-		else
-			return Integer.MAX_VALUE;
-	}
-	private ArrayList<Node> getPath(Node startNode, Node goalNode)
+	private Queue<Node> getShortestPath(Node startNode, Node goalNode)
 	{
 		this.startNode = startNode;
 		this.goalNode = goalNode;
@@ -252,14 +277,14 @@ class AStar{
 		queue.add(startNode); //will initialize with startNode being added to the queue
 		startNode.setParent(null);
 		
-		if(!search())
-		{
-			return null;
-		}
-		else
-		{
-			return path;
-		}
+		search();
+		
+		return path;
+	}
+	
+	private Queue<Node> getLongestPath(Node startNode, Node goalNode) //Finds the logest path from one point to another
+	{
+		return path;
 	}
 	
 	public PriorityQueue<Node> getQueue() {
@@ -286,7 +311,7 @@ class AStar{
 		this.grid = grid;
 	}
 	
-	public boolean search(){
+	public void search(){
 		while(!queue.isEmpty()){
 			Node parent = queue.remove(); //takes out the node
 			explored.add(parent); //adds the current node to explored
@@ -294,7 +319,6 @@ class AStar{
 			if(parent.equals(goalNode)) //if the goal is found
 			{
 				populatePath(goalNode); //displays the path
-				return true;
 			}
 			else
 			{
@@ -302,7 +326,7 @@ class AStar{
 				for(int i = 0 ; i < parent.getChildren().size() ; i++)
 				{
 					Node child = parent.getChildren().get(i);
-					if(child != null)
+					if(child != null && child.getOwner() == -1) //if it has no owner
 					{
 						if(!queue.contains(child) && !explored.contains(child))
 						{
@@ -317,11 +341,11 @@ class AStar{
 			}
 		}
 		System.out.println("Path not found");
-		return false; 
 	}
 
 	private void populatePath(Node goal) {
 		minDistance = 0;
+		path.clear();
 		while(goal.getParent() != null)
 		{
 			minDistance++;
