@@ -102,7 +102,7 @@ class Player {
         return false;
     }
     
-    public boolean clearPath() //checks if our path is clear and hasn't been taken over
+    public boolean clearPath() //checks if our desire route was crossed by another player
     {
     	for(Node n : path)
     	{
